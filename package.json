@@ -1,0 +1,28 @@
+{
+  "name": "@trademe/defer-load",
+  "version": "0.0.0-alpha-1",
+  "description": "Angular directive to load elements lazily",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "compile": "tsc",
+    "lint": "npm run lint:src",
+    "lint:src": "tslint -c tslint.json 'src/**/*.ts'",
+    "build": "npm run clean && npm run compile && npm run lint",
+    "build:ci": "npm run compile && npm run lint",
+    "clean": "rimraf ./compiled && rimraf ./dist",
+    "prepublish": "npm run build"
+  },
+  "author": "Vamsi Vempati",
+  "license": "MIT",
+  "dependencies": {
+    "@angular/common": "^5.2.9",
+    "@angular/core": "^5.2.9"
+  },
+  "devDependencies": {
+    "rxjs": "^5.5.7",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2",
+    "webpack": "^4.1.1"
+  }
+}
