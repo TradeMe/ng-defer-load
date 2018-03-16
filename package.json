@@ -5,25 +5,31 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "compile": "tsc",
+    "clean": "rimraf ./compiled && rimraf ./dist",
+    "prebuild": "npm run clean",
     "lint": "npm run lint:src",
     "lint:src": "tslint -c tslint.json 'src/**/*.ts'",
-    "build": "npm run clean && npm run compile && npm run lint",
-    "build:ci": "npm run compile && npm run lint",
-    "clean": "rimraf ./compiled && rimraf ./dist",
-    "prepublish": "npm run build"
+    "build": "ngc -p ./tsconfig.json && tsc -p ./tsconfig.json",
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "private": true,
   "author": "Vamsi Vempati",
   "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^5.2.9",
+    "@angular/core": "^5.2.9",
+    "rxjs": "^5.5.7",
+    "typescript": "^2.6.2",
+    "zone": "^0.8.4"
+  },
   "dependencies": {
     "@angular/common": "^5.2.9",
-    "@angular/core": "^5.2.9"
-  },
-  "devDependencies": {
+    "@angular/compiler": "^5.2.9",
+    "@angular/compiler-cli": "^5.2.9",
+    "@angular/core": "^5.2.9",
+    "rimraf": "^2.6.2",
     "rxjs": "^5.5.7",
     "tslint": "^5.9.1",
-    "typescript": "^2.7.2",
-    "webpack": "^4.1.1"
+    "typescript": "^2.6.2"
   }
 }

@@ -19,8 +19,8 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
     @Output() public tmOnDeferLoad: EventEmitter<any> = new EventEmitter();
 
-    private _intersectionObserver : IntersectionObserver;
-    private _scrollSubscription: Subscription;
+    private _intersectionObserver? : IntersectionObserver;
+    private _scrollSubscription?: Subscription;
 
     constructor (
         private _element: ElementRef,
@@ -31,7 +31,9 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         if ('IntersectionObserver' in window) {
             this.registerIntersectionObserver();
             this._element.nativeElement.id = DeferredLoaderDirective.makeGuid();
-            this._intersectionObserver.observe(<Element>(this._element.nativeElement));
+            if (this._intersectionObserver) {
+                this._intersectionObserver.observe(<Element>(this._element.nativeElement));
+            }
         } else {
             // add scroll watch if intersection observer is not available
             this.addScrollListeners();
@@ -51,14 +53,16 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         }, {});
     }
 
-    private checkForIntersection = (entries) => {
-        entries.forEach(entry => {
+    private checkForIntersection = (entries: Array<IntersectionObserverEntry>) => {
+        entries.forEach((entry: IntersectionObserverEntry) => {
             if ((<any>entry).isIntersecting && entry.target === this._element.nativeElement) {
                 this.load();
-                this._intersectionObserver.unobserve(<Element>(this._element.nativeElement));
+                if (this._intersectionObserver) {
+                    this._intersectionObserver.unobserve(<Element>(this._element.nativeElement));
+                }
             }
         });
-    }
+    };
 
     private load (): void {
         this.removeListeners();
@@ -91,15 +95,15 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         if (this.isVisible()) {
             this._zone.run(() => this.load());
         }
-    }
+    };
 
     private isVisible () {
-        let scrollPosition = window.scrollY + this.getClientHeight();
+        let scrollPosition = window.scrollY + DeferredLoaderDirective.getClientHeight();
         let elementOffset = this._element.nativeElement.offsetTop;
         return elementOffset <= scrollPosition;
     }
 
-    private getClientHeight (): number {
+    private static getClientHeight (): number {
         return document.documentElement.clientHeight;
     }
 }

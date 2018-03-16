@@ -9,7 +9,14 @@
     "declaration": true,
     "outDir": "./dist",
     "rootDir": "./src",
+    "strict": true,
     "lib": ["es2015", "dom"]
   },
-  "files": ["src/index.ts"]
+  "files": ["src/index.ts"],
+  "angularCompilerOptions": {
+    "genDir": "compiled",
+    "debug": true,
+    "skipMetadataEmit" : false,
+    "strictMetadataEmit": true
+  }
 }
