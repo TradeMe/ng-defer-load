@@ -13,6 +13,7 @@
     "clean": "rimraf ./compiled && rimraf ./dist",
     "prepublish": "npm run build"
   },
+  "private": true,
   "author": "Vamsi Vempati",
   "license": "MIT",
   "dependencies": {
