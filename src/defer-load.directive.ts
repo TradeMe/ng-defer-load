@@ -17,6 +17,10 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 
+    private static getClientHeight (): number {
+        return document.documentElement.clientHeight;
+    }
+
     @Output() public tmOnDeferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver? : IntersectionObserver;
@@ -62,7 +66,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
                 }
             }
         });
-    };
+    }
 
     private load (): void {
         this.removeListeners();
@@ -95,15 +99,11 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         if (this.isVisible()) {
             this._zone.run(() => this.load());
         }
-    };
+    }
 
     private isVisible () {
         let scrollPosition = window.scrollY + DeferredLoaderDirective.getClientHeight();
         let elementOffset = this._element.nativeElement.offsetTop;
         return elementOffset <= scrollPosition;
-    }
-
-    private static getClientHeight (): number {
-        return document.documentElement.clientHeight;
     }
 }
