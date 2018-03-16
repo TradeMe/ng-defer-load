@@ -11,7 +11,6 @@
     "build": "ngc -p ./tsconfig.json && tsc -p ./tsconfig.json",
     "prepublishOnly": "npm run lint && npm run build"
   },
-  "private": true,
   "author": "Vamsi Vempati",
   "license": "MIT",
   "peerDependencies": {
