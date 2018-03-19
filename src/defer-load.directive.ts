@@ -21,7 +21,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         return document.documentElement.clientHeight;
     }
 
-    @Output() public tmOnDeferLoad: EventEmitter<any> = new EventEmitter();
+    @Output() public onDeferredLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver? : IntersectionObserver;
     private _scrollSubscription?: Subscription;
@@ -70,7 +70,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
     private load (): void {
         this.removeListeners();
-        this.tmOnDeferLoad.emit();
+        this.onDeferredLoad.emit();
     }
 
     private addScrollListeners () {
