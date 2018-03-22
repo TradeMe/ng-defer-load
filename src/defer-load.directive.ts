@@ -17,10 +17,6 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 
-    private static getClientHeight (): number {
-        return document.documentElement.clientHeight;
-    }
-
     @Output() public onDeferredLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver? : IntersectionObserver;
@@ -59,13 +55,22 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
     private checkForIntersection = (entries: Array<IntersectionObserverEntry>) => {
         entries.forEach((entry: IntersectionObserverEntry) => {
-            if ((<any>entry).isIntersecting && entry.target === this._element.nativeElement) {
+            if (this.checkIfIntersecting(entry)) {
                 this.load();
                 if (this._intersectionObserver) {
                     this._intersectionObserver.unobserve(<Element>(this._element.nativeElement));
                 }
             }
         });
+    }
+
+    private checkIfIntersecting (entry) {
+        // For Samsung native browser, IO has been partially implemented where by the
+        // callback fires, but entry object is empty. We will check manually.
+        if (entry && Object.keys(entry).length) {
+            return (<any>entry).isIntersecting && entry.target === this._element.nativeElement;
+        }
+        return this.isVisible();
     }
 
     private load (): void {
@@ -102,8 +107,14 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
     }
 
     private isVisible () {
-        let scrollPosition = window.scrollY + DeferredLoaderDirective.getClientHeight();
+        let scrollPosition = this.getScrollPosition();
         let elementOffset = this._element.nativeElement.offsetTop;
         return elementOffset <= scrollPosition;
+    }
+
+    private getScrollPosition () {
+        // Getting screen size and scroll position for IE
+        return (this._windowRefService.nativeWindow.scrollY || this._windowRefService.nativeWindow.pageYOffset)
+            + (this._windowRefService.nativeDocument.documentElement.clientHeight || this._windowRefService.nativeDocument.body.clientHeight);
     }
 }
