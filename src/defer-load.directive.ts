@@ -64,7 +64,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         });
     }
 
-    private checkIfIntersecting (entry) {
+    private checkIfIntersecting (entry: IntersectionObserverEntry) {
         // For Samsung native browser, IO has been partially implemented where by the
         // callback fires, but entry object is empty. We will check manually.
         if (entry && Object.keys(entry).length) {
@@ -114,7 +114,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
     private getScrollPosition () {
         // Getting screen size and scroll position for IE
-        return (this._windowRefService.nativeWindow.scrollY || this._windowRefService.nativeWindow.pageYOffset)
-            + (this._windowRefService.nativeDocument.documentElement.clientHeight || this._windowRefService.nativeDocument.body.clientHeight);
+        return (window.scrollY || window.pageYOffset)
+            + (document.documentElement.clientHeight || document.body.clientHeight);
     }
 }
