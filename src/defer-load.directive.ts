@@ -19,7 +19,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
     @Output() public onDeferredLoad: EventEmitter<any> = new EventEmitter();
 
-    private _intersectionObserver? : IntersectionObserver;
+    private _intersectionObserver?: IntersectionObserver;
     private _scrollSubscription?: Subscription;
 
     constructor (
@@ -28,7 +28,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
     ) {}
 
     public ngAfterViewInit () {
-        if ('IntersectionObserver' in window) {
+        if (this.hasCompatibleBrowser()) {
             this.registerIntersectionObserver();
             this._element.nativeElement.id = DeferredLoaderDirective.makeGuid();
             if (this._intersectionObserver) {
@@ -38,6 +38,18 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
             // add scroll watch if intersection observer is not available
             this.addScrollListeners();
         }
+    }
+
+    public hasCompatibleBrowser (): boolean {
+        const window = window;
+        const hasIntersectionObserver = 'IntersectionObserver' in window;
+        const userAgent = window.navigator.userAgent;
+        const matches = userAgent.match(/Edge\/(\d*)\./i);
+
+        const isEdge = matches && matches.length > 1;
+        const isEdgeVersion16OrBetter = isEdge && parseInt(matches[1], 10) > 15;
+
+        return hasIntersectionObserver && (!isEdge || isEdgeVersion16OrBetter);
     }
 
     public ngOnDestroy () {
@@ -62,7 +74,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
                 }
             }
         });
-    }
+    };
 
     private checkIfIntersecting (entry: IntersectionObserverEntry) {
         // For Samsung native browser, IO has been partially implemented where by the
@@ -104,7 +116,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         if (this.isVisible()) {
             this._zone.run(() => this.load());
         }
-    }
+    };
 
     private isVisible () {
         let scrollPosition = this.getScrollPosition();
