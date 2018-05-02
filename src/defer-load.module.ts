@@ -1,9 +1,9 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-import {DeferredLoaderDirective} from './defer-load.directive';
+import {DeferLoadDirective} from './defer-load.directive';
 @NgModule({
     imports: [CommonModule],
-    declarations: [DeferredLoaderDirective],
-    exports: [DeferredLoaderDirective]
+    declarations: [DeferLoadDirective],
+    exports: [DeferLoadDirective]
 })
 export class DeferLoadModule { }
