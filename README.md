@@ -1,5 +1,5 @@
-# defer-load
-*defer-load* is an Angular directive to load elements lazily. 
+# ng-defer-load
+*ng-defer-load* is an Angular directive to load elements lazily. 
 
 It uses [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to check if an element is in viewport and falls back to scroll detection mechanism for unsupported browsers.
 
@@ -27,7 +27,7 @@ $ npm i @trademe/ng-defer-load
 
 ## Demo
 
-Demo of defer-load in use is available [here](https://stackblitz.com/edit/angular-defer-load).
+Demo of *ng-defer-load* in use is available [here](https://stackblitz.com/edit/angular-defer-load).
 
 ## License
 
