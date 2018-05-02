@@ -11,7 +11,7 @@ $ npm i @trademe/defer-load
 ```
 ## Usage
 
-1. Import `DeferLoadModule` into the module corresponding to your module
+1. Import `DeferLoadModule` into the module corresponding to your component
 
 2. Use the directive with the element you wish to lazy load
 ```html
