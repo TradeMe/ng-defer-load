@@ -9,17 +9,9 @@ import {Subscription} from 'rxjs/Subscription';
 })
 export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
-    private static makeGuid (): string {
-        function s4 () {
-            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-        }
-
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-    }
-
     @Output() public onDeferredLoad: EventEmitter<any> = new EventEmitter();
 
-    private _intersectionObserver? : IntersectionObserver;
+    private _intersectionObserver?: IntersectionObserver;
     private _scrollSubscription?: Subscription;
 
     constructor (
@@ -28,9 +20,8 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
     ) {}
 
     public ngAfterViewInit () {
-        if ('IntersectionObserver' in window) {
+        if (this.hasCompatibleBrowser()) {
             this.registerIntersectionObserver();
-            this._element.nativeElement.id = DeferredLoaderDirective.makeGuid();
             if (this._intersectionObserver) {
                 this._intersectionObserver.observe(<Element>(this._element.nativeElement));
             }
@@ -38,6 +29,17 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
             // add scroll watch if intersection observer is not available
             this.addScrollListeners();
         }
+    }
+
+    public hasCompatibleBrowser (): boolean {
+        const hasIntersectionObserver = 'IntersectionObserver' in window;
+        const userAgent = window.navigator.userAgent;
+        const matches = userAgent.match(/Edge\/(\d*)\./i);
+
+        const isEdge = !!matches && matches.length > 1;
+        const isEdgeVersion16OrBetter = isEdge && (!!matches && parseInt(matches[1], 10) > 15);
+
+        return hasIntersectionObserver && (!isEdge || isEdgeVersion16OrBetter);
     }
 
     public ngOnDestroy () {

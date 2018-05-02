@@ -1,6 +1,6 @@
 {
   "name": "@trademe/defer-load",
-  "version": "0.0.0-alpha.7",
+  "version": "1.0.0",
   "description": "Angular directive to load elements lazily",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -14,18 +14,18 @@
   "author": "Vamsi Vempati",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "~5.2.5",
-    "@angular/core": "~5.2.5",
-    "rxjs": "~5.5.6",
-    "tslib": "~1.8.1",
-    "typescript": "~2.6.2",
-    "zone.js": "~0.8.20"
+    "@angular/common": "^5.2.5",
+    "@angular/core": "^5.2.5",
+    "@angular/platform-browser": "^5.2.5",
+    "rxjs": "^5.5.6",
+    "tslib": "^1.8.1",
+    "zone.js": "^0.8.20"
   },
-  "dependencies": {
-    "@angular/common": "5.2.5",
+  "devDependencies": {
+    "@angular/common": "^5.2.5",
     "@angular/compiler": "^5.2.5",
     "@angular/compiler-cli": "^5.2.5",
-    "@angular/core": "5.2.5",
+    "@angular/core": "^5.2.5",
     "@angular/platform-browser": "^5.2.5",
     "rimraf": "^2.6.2",
     "rxjs": "^5.5.6",
