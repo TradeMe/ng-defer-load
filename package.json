@@ -1,6 +1,6 @@
 {
   "name": "@trademe/ng-defer-load",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Angular directive to load elements lazily",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -13,6 +13,18 @@
   },
   "author": "Vamsi Vempati",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TradeMe/ng-defer-load"
+  },
+  "keywords": [
+    "angular",
+    "lazyload",
+    "defer",
+    "deferload",
+    "intersection",
+    "intersectionobserver"
+  ],
   "peerDependencies": {
     "@angular/common": "^5.2.5",
     "@angular/core": "^5.2.5",
