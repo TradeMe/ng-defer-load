@@ -1,15 +1,14 @@
 import {AfterViewInit, Directive, ElementRef, EventEmitter, NgZone, OnDestroy, Output} from '@angular/core';
-import 'rxjs/add/observable/fromEvent';
-import {Observable} from 'rxjs/Observable';
+import {fromEvent} from 'rxjs/observable/fromEvent';
 import {debounceTime} from 'rxjs/operators';
 import {Subscription} from 'rxjs/Subscription';
 
 @Directive({
-    selector: '[onDeferredLoad]'
+    selector: '[deferLoad]'
 })
-export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
+export class DeferLoadDirective implements AfterViewInit, OnDestroy {
 
-    @Output() public onDeferredLoad: EventEmitter<any> = new EventEmitter();
+    @Output() public deferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
     private _scrollSubscription?: Subscription;
@@ -77,7 +76,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
     private load (): void {
         this.removeListeners();
-        this.onDeferredLoad.emit();
+        this.deferLoad.emit();
     }
 
     private addScrollListeners () {
@@ -86,7 +85,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
             return;
         }
         this._zone.runOutsideAngular(() => {
-            this._scrollSubscription = Observable.fromEvent(window, 'scroll')
+            this._scrollSubscription = fromEvent(window, 'scroll')
                 .pipe(debounceTime(50))
                 .subscribe(this.onScroll);
         });
