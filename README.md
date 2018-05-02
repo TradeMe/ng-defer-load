@@ -7,7 +7,7 @@ It uses [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web
 
 Using npm:
 ```shell
-$ npm i @trademe/defer-load
+$ npm i @trademe/ng-defer-load
 ```
 ## Usage
 
@@ -31,4 +31,4 @@ Demo of defer-load in use is available [here](https://stackblitz.com/edit/angula
 
 ## License
 
-Released under the [MIT license](https://raw.githubusercontent.com/lodash/lodash/4.17.10-npm/LICENSE).
+Released under the [MIT license](https://github.com/TradeMe/ng-defer-load/blob/master/README.md).
