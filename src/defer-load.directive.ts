@@ -9,14 +9,6 @@ import {Subscription} from 'rxjs/Subscription';
 })
 export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
 
-    private static makeGuid (): string {
-        function s4 () {
-            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-        }
-
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-    }
-
     @Output() public onDeferredLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
@@ -30,7 +22,6 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
     public ngAfterViewInit () {
         if (this.hasCompatibleBrowser()) {
             this.registerIntersectionObserver();
-            this._element.nativeElement.id = DeferredLoaderDirective.makeGuid();
             if (this._intersectionObserver) {
                 this._intersectionObserver.observe(<Element>(this._element.nativeElement));
             }
@@ -41,13 +32,12 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
     }
 
     public hasCompatibleBrowser (): boolean {
-        const window = window;
         const hasIntersectionObserver = 'IntersectionObserver' in window;
         const userAgent = window.navigator.userAgent;
         const matches = userAgent.match(/Edge\/(\d*)\./i);
 
-        const isEdge = matches && matches.length > 1;
-        const isEdgeVersion16OrBetter = isEdge && parseInt(matches[1], 10) > 15;
+        const isEdge = !!matches && matches.length > 1;
+        const isEdgeVersion16OrBetter = isEdge && (!!matches && parseInt(matches[1], 10) > 15);
 
         return hasIntersectionObserver && (!isEdge || isEdgeVersion16OrBetter);
     }
@@ -74,7 +64,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
                 }
             }
         });
-    };
+    }
 
     private checkIfIntersecting (entry: IntersectionObserverEntry) {
         // For Samsung native browser, IO has been partially implemented where by the
@@ -116,7 +106,7 @@ export class DeferredLoaderDirective implements AfterViewInit, OnDestroy {
         if (this.isVisible()) {
             this._zone.run(() => this.load());
         }
-    };
+    }
 
     private isVisible () {
         let scrollPosition = this.getScrollPosition();
