@@ -1,8 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
-import { fromEvent } from 'rxjs/observable/fromEvent';
+import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Subscription } from 'rxjs/Subscription';
 
 @Directive({
     selector: '[deferLoad]'
@@ -66,7 +65,7 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         entries.forEach((entry: IntersectionObserverEntry) => {
             if (this.checkIfIntersecting(entry)) {
                 this.load();
-                if (this._intersectionObserver) {
+                if (this._intersectionObserver && this._element.nativeElement) {
                     this._intersectionObserver.unobserve(<Element>(this._element.nativeElement));
                 }
             }
