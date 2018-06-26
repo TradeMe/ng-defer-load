@@ -25,6 +25,23 @@ $ npm i @trademe/ng-defer-load
 ```
 *Note:* You might want to have a loading state for your element with approximately same height as the element.
 
+## Server Side Rendering
+
+`ng-defer-load` supports Server Side Rendering from version 1.1.0
+
+It loads the element on the server by default supporting Search Engine Optimization. If you do not want to pre-render the element in server, you can set `preRender` to false on the element as below:
+
+```html
+  <div
+    preRender="false"
+    (deferLoad)="showMyElement=true">
+    <my-element
+       *ngIf=showMyElement>
+      ...
+    </my-element>
+</div>
+```
+
 ## Demo
 
 Demo of *ng-defer-load* in use is available [here](https://stackblitz.com/edit/angular-defer-load).
@@ -32,3 +49,8 @@ Demo of *ng-defer-load* in use is available [here](https://stackblitz.com/edit/a
 ## License
 
 Released under the [MIT license](https://github.com/TradeMe/ng-defer-load/blob/master/README.md).
+
+## Release notes
+
+v1.0.1 - Initial version
+v1.1.0 - Supports Universal - Server Side Rendering
