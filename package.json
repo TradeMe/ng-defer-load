@@ -1,6 +1,6 @@
 {
   "name": "@trademe/ng-defer-load",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Angular directive to load elements lazily",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -40,7 +40,7 @@
     "@angular/core": "^5.2.5",
     "@angular/platform-browser": "^5.2.5",
     "rimraf": "^2.6.2",
-    "rxjs": "^5.5.6",
+    "rxjs": "^6.2.1",
     "tslib": "^1.8.1",
     "tslint": "^5.9.1",
     "typescript": "^2.6.2",

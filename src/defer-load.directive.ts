@@ -1,45 +1,43 @@
-import { AfterViewInit, Directive, ElementRef, EventEmitter, NgZone, OnDestroy, Output, PLATFORM_ID, Inject } from '@angular/core';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { debounceTime } from 'rxjs/operators';
-import { Subscription } from 'rxjs/Subscription';
 import { isPlatformBrowser } from '@angular/common';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
+import { fromEvent, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Directive({
     selector: '[deferLoad]'
 })
 export class DeferLoadDirective implements AfterViewInit, OnDestroy {
 
+    @Input() public preRender: boolean = true;
     @Output() public deferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
     private _scrollSubscription?: Subscription;
 
-    constructor(
+    constructor (
         private _element: ElementRef,
         private _zone: NgZone,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
-    public ngAfterViewInit() {
+    public ngAfterViewInit () {
         if (isPlatformBrowser(this.platformId)) {
-            // browser
             if (this.hasCompatibleBrowser()) {
                 this.registerIntersectionObserver();
-                if (this._intersectionObserver) {
+                if (this._intersectionObserver && this._element.nativeElement) {
                     this._intersectionObserver.observe(<Element>(this._element.nativeElement));
                 }
             } else {
-                // add scroll watch if intersection observer is not available
                 this.addScrollListeners();
             }
-        }
-        else {
-            // server
-            this.load();
+        } else {
+            if (this.preRender) {
+                this.load();
+            }
         }
     }
 
-    public hasCompatibleBrowser(): boolean {
+    public hasCompatibleBrowser (): boolean {
         const hasIntersectionObserver = 'IntersectionObserver' in window;
         const userAgent = window.navigator.userAgent;
         const matches = userAgent.match(/Edge\/(\d*)\./i);
@@ -50,11 +48,11 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         return hasIntersectionObserver && (!isEdge || isEdgeVersion16OrBetter);
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy () {
         this.removeListeners();
     }
 
-    private registerIntersectionObserver(): void {
+    private registerIntersectionObserver (): void {
         if (!!this._intersectionObserver) {
             return;
         }
@@ -67,14 +65,14 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         entries.forEach((entry: IntersectionObserverEntry) => {
             if (this.checkIfIntersecting(entry)) {
                 this.load();
-                if (this._intersectionObserver) {
+                if (this._intersectionObserver && this._element.nativeElement) {
                     this._intersectionObserver.unobserve(<Element>(this._element.nativeElement));
                 }
             }
         });
     }
 
-    private checkIfIntersecting(entry: IntersectionObserverEntry) {
+    private checkIfIntersecting (entry: IntersectionObserverEntry) {
         // For Samsung native browser, IO has been partially implemented where by the
         // callback fires, but entry object is empty. We will check manually.
         if (entry && Object.keys(entry).length) {
@@ -83,12 +81,12 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         return this.isVisible();
     }
 
-    private load(): void {
+    private load (): void {
         this.removeListeners();
         this.deferLoad.emit();
     }
 
-    private addScrollListeners() {
+    private addScrollListeners () {
         if (this.isVisible()) {
             this.load();
             return;
@@ -100,7 +98,7 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         });
     }
 
-    private removeListeners() {
+    private removeListeners () {
         if (this._scrollSubscription) {
             this._scrollSubscription.unsubscribe();
         }
@@ -116,13 +114,13 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         }
     }
 
-    private isVisible() {
+    private isVisible () {
         let scrollPosition = this.getScrollPosition();
         let elementOffset = this._element.nativeElement.offsetTop;
         return elementOffset <= scrollPosition;
     }
 
-    private getScrollPosition() {
+    private getScrollPosition () {
         // Getting screen size and scroll position for IE
         return (window.scrollY || window.pageYOffset)
             + (document.documentElement.clientHeight || document.body.clientHeight);
