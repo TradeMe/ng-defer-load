@@ -29,7 +29,7 @@ $ npm i @trademe/ng-defer-load
 
 `ng-defer-load` supports Server Side Rendering from version 1.1.0
 
-It loads the element on the server by default supporting Serach Engine Optimization. If you do not want to pre-render the element in server, you can set `preRender` to false on the element as below:
+It loads the element on the server by default supporting Search Engine Optimization. If you do not want to pre-render the element in server, you can set `preRender` to false on the element as below:
 
 ```html
   <div
