@@ -53,4 +53,7 @@ Released under the [MIT license](https://github.com/TradeMe/ng-defer-load/blob/m
 ## Release notes
 
 v1.0.1 - Initial version
+
 v1.1.0 - Supports Universal - Server Side Rendering
+
+v2.0.0 - Suuports Angular 6
