@@ -56,4 +56,4 @@ v1.0.1 - Initial version
 
 v1.1.0 - Supports Universal - Server Side Rendering
 
-v2.0.0 - Suuports Angular 6
+v2.0.0 - Supports Angular 6
