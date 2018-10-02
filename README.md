@@ -15,7 +15,7 @@ $ npm i @trademe/ng-defer-load
 
 2. Use the directive with the element you wish to lazy load
 ```html
-  <div
+<div
     (deferLoad)="showMyElement=true">
     <my-element
        *ngIf=showMyElement>
@@ -25,6 +25,58 @@ $ npm i @trademe/ng-defer-load
 ```
 *Note:* You might want to have a loading state for your element with approximately same height as the element.
 
+3. Optional `manualRegister` attribute: you can manually control the registration timing of the directive
+```html
+<div
+    (deferLoad)="showMyElement=true"
+    manualRegister>
+    <my-element
+       *ngIf=showMyElement>
+      ...
+    </my-element>
+</div>
+```
+```javascript
+// in your code somewhere
+import { DeferLoadService } from 'ng-defer-load';
+
+setTimeout(_ => this.deferLoadService.announceOrder('register'), 1500);
+```
+4. Optional `[url]` input: you can provide this additional information so that the directive can react better to the url change
+```html
+<div
+    (deferLoad)="showMyElement=true"
+    [url]="urlToMyImage" 
+    manualRegister>
+    <my-element
+       *ngIf=showMyElement>
+      ...
+    </my-element>
+</div>
+```
+5. Optional `[index]` input: you can provide an index in `ngFor` loop and let the directives broadcast the intersecting element's index so that you have more flexibility to decide which resources to load
+```html
+<my-element
+    *ngFor="let item of items$ | async; let i = index"
+    deferLoad
+    [url]="item.url"
+    [index]="i" 
+    manualRegister>
+</my-element>
+```
+```javascript
+// in MyElementComponent
+constructor(private deferLoadService: DeferLoadService) {
+
+  this.deferLoadService.announcedIntersection.subscribe(params => {
+    const { index, state } = params;
+    if ((this.index - index) <= 2) {
+      this.toLoad = true; // load 2 resources ahead beyond the intersecting index
+    }
+  });
+}
+```
+
 ## Server Side Rendering
 
 `ng-defer-load` supports Server Side Rendering from version 1.1.0
@@ -32,7 +84,7 @@ $ npm i @trademe/ng-defer-load
 It loads the element on the server by default supporting Search Engine Optimization. If you do not want to pre-render the element in server, you can set `preRender` to false on the element as below:
 
 ```html
-  <div
+<div
     preRender="false"
     (deferLoad)="showMyElement=true">
     <my-element

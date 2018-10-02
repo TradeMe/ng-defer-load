@@ -1,7 +1,10 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, first } from 'rxjs/operators';
+import { DeferLoadService, IntersectionState } from './defer-load.service';
+
+const NOT_GIVEN = 'not given';
 
 @Directive({
     selector: '[deferLoad]'
@@ -12,29 +15,56 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
     @Output() public deferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
-    private _scrollSubscription?: Subscription;
+    private _subscription = new Subscription();
 
-    constructor (
+    private _init = false;
+    private _url = NOT_GIVEN;
+    
+    /* cases for 'url' setter:
+    1a. null (OnInit): do nothing in ngAfterViewInit
+    1b. urla (OnInit): register promptly or manually in ngAfterViewInit
+    2. null -> urla (runtime): register promptly
+    3. urla -> null (runtime): do nothing
+    4. urla -> urlb (runtime): do nothing
+    */
+    @Input()
+    set url(value: string) { // optional
+        if (value === this._url) return;
+    
+        if (this._init) {
+            if (!this._url && value) {
+                this.doRegister();
+                if (this._service.isDevMode) console.log('case 2.');
+            } else if (this._url && !value) {
+                if (this._service.isDevMode) console.log('case 3.');
+            } else if (this._url && this._url !== value) {
+                if (this._service.isDevMode) console.log('case 4.');
+            }
+        }
+    
+        this._url = (value && value.trim()) || '';
+    }
+  
+    @Input() index = -1;
+    get manual() { return this._element.nativeElement.getAttribute('manualRegister') !== null; }
+
+    constructor (private _service: DeferLoadService,
         private _element: ElementRef,
         private _zone: NgZone,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
     public ngAfterViewInit () {
-        if (isPlatformBrowser(this.platformId)) {
-            if (this.hasCompatibleBrowser()) {
-                this.registerIntersectionObserver();
-                if (this._intersectionObserver && this._element.nativeElement) {
-                    this._intersectionObserver.observe(<Element>(this._element.nativeElement));
-                }
-            } else {
-                this.addScrollListeners();
-            }
-        } else {
-            if (this.preRender) {
-                this.load();
-            }
+        if (!this._url) {
+            if (this._service.isDevMode) console.log('deferLoad never');
+        } else if (this.manual) { // register later
+            const sub = this._service.announcedOrder.pipe(first()).subscribe(_ => this.doRegister());
+            this._subscription.add(sub);
+        } else { // register now (default)
+            this.doRegister();
         }
+
+        this._init = true;
     }
 
     public hasCompatibleBrowser (): boolean {
@@ -52,6 +82,26 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         this.removeListeners();
     }
 
+    private doRegister() {
+        if (isPlatformBrowser(this.platformId)) {
+            if (this.hasCompatibleBrowser()) {
+                this.registerIntersectionObserver();
+                if (this._intersectionObserver && this._element.nativeElement) {
+                    this._intersectionObserver.observe(<Element>(this._element.nativeElement));
+                    if (this._service.isDevMode) console.log('deferLoad register');
+                }
+            } else {
+                this.addScrollListeners();
+                if (this._service.isDevMode) console.log('deferLoad listener');
+            }
+        } else {
+            if (this.preRender) {
+                this.load(IntersectionState.Prerender);
+                if (this._service.isDevMode) console.log('deferLoad prerender');
+            }
+        }
+    }
+
     private registerIntersectionObserver (): void {
         if (!!this._intersectionObserver) {
             return;
@@ -63,8 +113,9 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
 
     private checkForIntersection = (entries: Array<IntersectionObserverEntry>) => {
         entries.forEach((entry: IntersectionObserverEntry) => {
-            if (this.checkIfIntersecting(entry)) {
-                this.load();
+            const state = this.checkIfIntersecting(entry);
+            if (state > IntersectionState.None) {
+                this.load(state);
                 if (this._intersectionObserver && this._element.nativeElement) {
                     this._intersectionObserver.unobserve(<Element>(this._element.nativeElement));
                 }
@@ -72,35 +123,45 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         });
     }
 
-    private checkIfIntersecting (entry: IntersectionObserverEntry) {
+    private checkIfIntersecting (entry: IntersectionObserverEntry): IntersectionState {
         // For Samsung native browser, IO has been partially implemented where by the
         // callback fires, but entry object is empty. We will check manually.
-        if (entry && Object.keys(entry).length) {
-            return (<any>entry).isIntersecting && entry.target === this._element.nativeElement;
+        if (entry && 'isIntersecting' in entry) {
+            if ((<any>entry).isIntersecting && entry.target === this._element.nativeElement) {
+                return IntersectionState.Intersecting;
+            }
         }
-        return this.isVisible();
+        if (this.isVisible()) {
+            return IntersectionState.Visible;
+        }
+        return IntersectionState.None; // not intersecting
     }
 
-    private load (): void {
+    private load (state: IntersectionState): void {
         this.removeListeners();
-        this.deferLoad.emit();
+        if (this.index === -1) { // [index] input not given
+            this.deferLoad.emit(state);
+        } else {
+            this._service.announceIntersection({ index: this.index, state });
+        }
     }
 
     private addScrollListeners () {
         if (this.isVisible()) {
-            this.load();
+            this.load(IntersectionState.Visible);
             return;
         }
         this._zone.runOutsideAngular(() => {
-            this._scrollSubscription = fromEvent(window, 'scroll')
+            const sub = fromEvent(window, 'scroll')
                 .pipe(debounceTime(50))
                 .subscribe(this.onScroll);
+            this._subscription.add(sub);
         });
     }
 
     private removeListeners () {
-        if (this._scrollSubscription) {
-            this._scrollSubscription.unsubscribe();
+        if (this._subscription) {
+            this._subscription.unsubscribe();
         }
 
         if (this._intersectionObserver) {
@@ -110,7 +171,7 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
 
     private onScroll = () => {
         if (this.isVisible()) {
-            this._zone.run(() => this.load());
+            this._zone.run(() => this.load(IntersectionState.Visible));
         }
     }
 
