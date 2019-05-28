@@ -31,7 +31,7 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
                 this.addScrollListeners();
             }
         } else {
-            if (this.preRender) {
+            if (this.preRender === true) {
                 this.load();
             }
         }

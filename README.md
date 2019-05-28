@@ -33,7 +33,7 @@ It loads the element on the server by default supporting Search Engine Optimizat
 
 ```html
   <div
-    preRender="false"
+    [preRender]="false"
     (deferLoad)="showMyElement=true">
     <my-element
        *ngIf=showMyElement>
