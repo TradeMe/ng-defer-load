@@ -1,12 +1,12 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Directive({
     selector: '[deferLoad]'
 })
-export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
+export class DeferLoadDirective implements OnInit, OnDestroy {
 
     @Input() public preRender: boolean = true;
     @Input() public fallbackEnabled: boolean = true;
@@ -24,11 +24,7 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     public ngOnInit () {
         if (isPlatformServer(this.platformId) && this.preRender === true) {
             this.load();
-        }
-    }
-
-    public ngAfterViewInit () {
-        if (isPlatformBrowser(this.platformId)) {
+        } else {
             if (this.hasCompatibleBrowser()) {
                 this.registerIntersectionObserver();
                 if (this._intersectionObserver && this._element.nativeElement) {
