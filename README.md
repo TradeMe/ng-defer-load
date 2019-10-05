@@ -50,7 +50,7 @@ If you do not want to allow this fallback, and would prefer the browser to just 
 
 ```html
   <div
-    [preRender]="false"
+    [fallbackEnabled]="false"
     (deferLoad)="showMyElement=true">
     <my-element
        *ngIf=showMyElement>
