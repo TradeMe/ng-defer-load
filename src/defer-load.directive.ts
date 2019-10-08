@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -22,7 +22,8 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     ) { }
 
     public ngOnInit () {
-        if (isPlatformServer(this.platformId) && this.preRender === true) {
+        if ((isPlatformServer(this.platformId) && this.preRender === true) ||
+            (isPlatformBrowser(this.platformId) && this.fallbackEnabled === false && !this.hasCompatibleBrowser())) {
             this.load();
         }
     }
@@ -34,12 +35,8 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
                 if (this._intersectionObserver && this._element.nativeElement) {
                     this._intersectionObserver.observe(<Element>(this._element.nativeElement));
                 }
-            } else {
-                if (this.fallbackEnabled === true) {
-                    this.addScrollListeners();
-                } else {
-                    this.load();
-                }
+            } else if (this.fallbackEnabled === true) {
+                this.addScrollListeners();
             }
         }
     }
