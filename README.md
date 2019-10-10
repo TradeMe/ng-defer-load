@@ -42,6 +42,23 @@ It loads the element on the server by default supporting Search Engine Optimizat
 </div>
 ```
 
+## Fall back support
+
+`ng-defer-load` supports a fall back in browsers that do not support the IntersectionObserver API. This uses the scroll position and the element's offset. This is enabled by default.
+
+If you do not want to allow this fallback, and would prefer the browser to just render the element regardless, you can set `fallbackEnabled` to false on the element as below:
+
+```html
+  <div
+    [fallbackEnabled]="false"
+    (deferLoad)="showMyElement=true">
+    <my-element
+       *ngIf=showMyElement>
+      ...
+    </my-element>
+</div>
+```
+
 ## Demo
 
 Demo of *ng-defer-load* in use is available [here](https://stackblitz.com/edit/angular-defer-load).

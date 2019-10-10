@@ -1,14 +1,15 @@
-import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Inject, Input, NgZone, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Directive({
     selector: '[deferLoad]'
 })
-export class DeferLoadDirective implements AfterViewInit, OnDestroy {
+export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
 
     @Input() public preRender: boolean = true;
+    @Input() public fallbackEnabled: boolean = true;
     @Output() public deferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
@@ -20,6 +21,13 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
+    public ngOnInit () {
+        if ((isPlatformServer(this.platformId) && this.preRender === true) ||
+            (isPlatformBrowser(this.platformId) && this.fallbackEnabled === false && !this.hasCompatibleBrowser())) {
+            this.load();
+        }
+    }
+
     public ngAfterViewInit () {
         if (isPlatformBrowser(this.platformId)) {
             if (this.hasCompatibleBrowser()) {
@@ -27,12 +35,8 @@ export class DeferLoadDirective implements AfterViewInit, OnDestroy {
                 if (this._intersectionObserver && this._element.nativeElement) {
                     this._intersectionObserver.observe(<Element>(this._element.nativeElement));
                 }
-            } else {
+            } else if (this.fallbackEnabled === true) {
                 this.addScrollListeners();
-            }
-        } else {
-            if (this.preRender === true) {
-                this.load();
             }
         }
     }
