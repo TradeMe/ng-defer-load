@@ -78,3 +78,5 @@ v2.0.0 - Supports Angular 6
 v3.0.0 - Supports Angular 7
 
 v3.1.0 - Made it possible to switch off scroll fallback
+
+v8.0.0 - Supports Angular 8
