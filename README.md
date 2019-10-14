@@ -61,7 +61,7 @@ If you do not want to allow this fallback, and would prefer the browser to just 
 
 ## Demo
 
-Demo of *ng-defer-load* in use is available [here](https://stackblitz.com/edit/angular-defer-load).
+Demo of *ng-defer-load* in use is available [here](https://stackblitz.com/edit/ng-defer-load).
 
 ## License
 
