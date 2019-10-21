@@ -10,6 +10,7 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
 
     @Input() public preRender: boolean = true;
     @Input() public fallbackEnabled: boolean = true;
+    @Input() public removeListenersAfterLoad: boolean = true;
     @Output() public deferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
@@ -86,7 +87,9 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private load (): void {
-        this.removeListeners();
+        if (this.removeListenersAfterLoad) {
+            this.removeListeners();
+        }
         this.deferLoad.emit();
     }
 
