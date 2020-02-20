@@ -8,12 +8,23 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
 
+    private static getScrollPosition () {
+        // Getting screen size and scroll position for IE
+        return (window.scrollY || window.pageYOffset)
+          + (document.documentElement.clientHeight || document.body.clientHeight);
+    }
+
     @Input() public preRender: boolean = true;
     @Input() public fallbackEnabled: boolean = true;
+
+    /** Disables lazy loading */
+    @Input() public eagerLoad: boolean = false;
+
     @Output() public deferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
     private _scrollSubscription?: Subscription;
+    private _loaded?: boolean;
 
     constructor (
         private _element: ElementRef,
@@ -22,20 +33,25 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     ) { }
 
     public ngOnInit () {
-        if ((isPlatformServer(this.platformId) && this.preRender === true) ||
-            (isPlatformBrowser(this.platformId) && this.fallbackEnabled === false && !this.hasCompatibleBrowser())) {
+        if (
+          this.eagerLoad
+          || (isPlatformServer(this.platformId) && this.preRender)
+          || (isPlatformBrowser(this.platformId) && !this.fallbackEnabled && !this.hasCompatibleBrowser())
+        ) {
             this.load();
         }
     }
 
     public ngAfterViewInit () {
+        if (this._loaded) { return; }
+
         if (isPlatformBrowser(this.platformId)) {
             if (this.hasCompatibleBrowser()) {
                 this.registerIntersectionObserver();
                 if (this._intersectionObserver && this._element.nativeElement) {
                     this._intersectionObserver.observe(<Element>(this._element.nativeElement));
                 }
-            } else if (this.fallbackEnabled === true) {
+            } else if (this.fallbackEnabled) {
                 this.addScrollListeners();
             }
         }
@@ -86,6 +102,7 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private load (): void {
+        this._loaded = true;
         this.removeListeners();
         this.deferLoad.emit();
     }
@@ -119,14 +136,8 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private isVisible () {
-        let scrollPosition = this.getScrollPosition();
+        let scrollPosition = DeferLoadDirective.getScrollPosition();
         let elementOffset = this._element.nativeElement.offsetTop;
         return elementOffset <= scrollPosition;
-    }
-
-    private getScrollPosition () {
-        // Getting screen size and scroll position for IE
-        return (window.scrollY || window.pageYOffset)
-            + (document.documentElement.clientHeight || document.body.clientHeight);
     }
 }
