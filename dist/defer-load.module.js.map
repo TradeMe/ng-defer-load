@@ -1,0 +1,1 @@
+{"version":3,"file":"defer-load.module.js","sourceRoot":"","sources":["../src/defer-load.module.ts"],"names":[],"mappings":";;;AAAA,0CAA6C;AAC7C,sCAAuC;AACvC,+DAA0D;AAM1D;IAAA;IAA+B,CAAC;IAAnB,eAAe;QAL3B,eAAQ,CAAC;YACN,OAAO,EAAE,CAAC,qBAAY,CAAC;YACvB,YAAY,EAAE,CAAC,yCAAkB,CAAC;YAClC,OAAO,EAAE,CAAC,yCAAkB,CAAC;SAChC,CAAC;OACW,eAAe,CAAI;IAAD,sBAAC;CAAA,AAAhC,IAAgC;AAAnB,0CAAe"}
