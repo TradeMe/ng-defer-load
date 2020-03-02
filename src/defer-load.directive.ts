@@ -123,7 +123,7 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
 
     private isVisible () {
         let scrollPosition = this.getScrollPosition();
-        let elementOffset = this._element.nativeElement.offsetTop;
+        let elementOffset = this._element.nativeElement.getBoundingClientRect().top + (window.scrollY || window.pageYOffset);
         return elementOffset <= scrollPosition;
     }
 
