@@ -82,3 +82,5 @@ v3.1.0 - Made it possible to switch off scroll fallback
 v8.0.0 - Supports Angular 8/9
 
 v8.1.0 - Supports more package formats (using ng-packagr)
+
+v8.2.0 - Added option to remove listeners after load
