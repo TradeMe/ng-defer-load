@@ -86,3 +86,5 @@ v8.1.0 - Supports more package formats (using ng-packagr)
 v8.2.0 - Added option to remove listeners after load
 
 v8.2.1 - Fix for IE11 and older browsers
+
+v8.2.2 - Updated dependencies due to security advisories

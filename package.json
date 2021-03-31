@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@trademe/ng-defer-load",
-  "version": "8.2.1",
+  "version": "8.2.2",
   "description": "Angular directive to load elements lazily",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -17,7 +17,7 @@
       "entryFile": "src/public_api.ts"
     }
   },
-  "author": "Vamsi Vempati, Michael Zoellner",
+  "author": "Vamsi Vempati, Michael Zoellner, Nick Webster",
   "license": "MIT",
   "repository": {
     "type": "git",
