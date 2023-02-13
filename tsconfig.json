@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "sourceMap":   true,
     "moduleResolution": "node",
@@ -15,6 +15,7 @@
       "./node_modules/@types"
     ],
     "strict": true,
+    "strictNullChecks": true,
     "lib": ["es6", "es2015", "dom"]
   },
   "files": ["src/public_api.ts"],

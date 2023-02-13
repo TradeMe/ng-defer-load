@@ -1,7 +1,6 @@
 {
-  "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@trademe/ng-defer-load",
-  "version": "8.2.2",
+  "version": "14.0.0",
   "description": "Angular directive to load elements lazily",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -9,13 +8,8 @@
     "clean": "rimraf ./compiled && rimraf ./dist",
     "prebuild": "npm run clean",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "build": "ng-packagr -p package.json",
+    "build": "ng-packagr -p ng-package.json",
     "prepublishOnly": "npm run lint && npm run build"
-  },
-  "ngPackage": {
-    "lib": {
-      "entryFile": "src/public_api.ts"
-    }
   },
   "author": "Vamsi Vempati, Michael Zoellner, Nick Webster",
   "license": "MIT",
@@ -32,26 +26,27 @@
     "intersectionobserver"
   ],
   "dependencies": {
-    "tslib": "^1.9.0"
+    "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/common": ">=8.0.0",
-    "@angular/core": ">=8.0.0",
-    "@angular/platform-browser": ">=8.0.0",
-    "rxjs": "^6.4.0",
-    "zone.js": ">=0.9.1"
+    "@angular/common": "^14.2.12",
+    "@angular/core": "^14.2.12",
+    "@angular/platform-browser": "^14.2.12",
+    "rxjs": "~7.5.7",
+    "zone.js": "~0.11.8"
   },
   "devDependencies": {
-    "@angular/common": "8.2.14",
-    "@angular/compiler": "8.2.14",
-    "@angular/compiler-cli": "8.2.14",
-    "@angular/core": "8.2.14",
-    "@angular/platform-browser": "8.2.14",
-    "ng-packagr": "5.7.1",
+    "@angular/common": "^14.2.12",
+    "@angular/core": "^14.2.12",
+    "@angular/platform-browser": "^14.2.12",
+    "rxjs": "~7.5.7",
+    "zone.js": "~0.11.8",
+    "@angular/compiler": "^14.2.12",
+    "@angular/compiler-cli": "^14.2.12",
+    "ng-packagr": "^14.2.2",
     "rimraf": "^3.0.0",
-    "rxjs": "^6.4.0",
-    "tslint": "^5.20.0",
-    "typescript": "~3.5.3",
-    "zone.js": "~0.9.1"
+    "tslint": "^6.1.3",
+    "typescript": "~4.8.4",
+    "tslib": "^2.3.0"
   }
 }
