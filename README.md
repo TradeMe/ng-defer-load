@@ -42,6 +42,23 @@ It loads the element on the server by default supporting Search Engine Optimizat
 </div>
 ```
 
+## Fall back support
+
+`ng-defer-load` supports a fall back in browsers or devices (like older iPhones) that do not support the IntersectionObserver API. This uses the scroll position and the element's offset. This is enabled by default.
+
+If you do not want to allow this fallback, and would prefer the browser to just render the element regardless, you can set `fallbackEnabled` to false on the element as below:
+
+```html
+  <div
+    [fallbackEnabled]="false"
+    (deferLoad)="showMyElement=true">
+    <my-element
+       *ngIf=showMyElement>
+      ...
+    </my-element>
+</div>
+```
+
 ## Demo
 
 Demo of *ng-defer-load* in use is available [here](https://stackblitz.com/edit/ng-defer-load).
@@ -73,21 +90,3 @@ v8.2.1 - Fix for IE11 and older browsers
 v8.2.2 - Updated dependencies due to security advisories
 
 v14.0.0 - Supports Angular 12+ (targeting Angular 14) with partial Ivy builds. Additionally, drops support for IE11.
-
-## Deprecated features
-### Fall back support (<14)
-
-`ng-defer-load` supports a fall back in browsers that do not support the IntersectionObserver API. This uses the scroll position and the element's offset. This is enabled by default.
-
-If you do not want to allow this fallback, and would prefer the browser to just render the element regardless, you can set `fallbackEnabled` to false on the element as below:
-
-```html
-  <div
-    [fallbackEnabled]="false"
-    (deferLoad)="showMyElement=true">
-    <my-element
-       *ngIf=showMyElement>
-      ...
-    </my-element>
-</div>
-```
