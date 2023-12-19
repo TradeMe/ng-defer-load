@@ -7,7 +7,22 @@
       "root": ".",
       "sourceRoot": "src",
       "projectType": "library",
-      "prefix": "lib"
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "tsconfig.json",
+            "project": "ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "tsconfig.json",
+              "project": "ng-package.json"
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -29,19 +29,17 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/common": "^14.2.12",
-    "@angular/core": "^14.2.12",
-    "@angular/platform-browser": "^14.2.12",
     "rxjs": "~7.5.7",
     "zone.js": "~0.11.8"
   },
   "devDependencies": {
-    "@angular/cli": "^14.2.12",
-    "@angular/common": "^14.2.12",
-    "@angular/compiler": "^14.2.12",
-    "@angular/compiler-cli": "^14.2.12",
-    "@angular/core": "^14.2.12",
-    "@angular/platform-browser": "^14.2.12",
+    "@angular-devkit/core": "^15.2.10",
+    "@angular/cli": "^15.2.10",
+    "@angular/common": "^15.2.10",
+    "@angular/compiler": "^15.2.10",
+    "@angular/compiler-cli": "^15.2.10",
+    "@angular/core": "^15.2.10",
+    "@angular/platform-browser": "^15.2.10",
     "ng-packagr": "^14.2.2",
     "rimraf": "^3.0.0",
     "rxjs": "~7.5.7",
