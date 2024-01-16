@@ -1,6 +1,6 @@
 {
   "name": "@trademe/ng-defer-load",
-  "version": "16.0.0",
+  "version": "17.0.0",
   "description": "Angular directive to load elements lazily",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
