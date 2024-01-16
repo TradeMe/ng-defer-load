@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "ES2022",
     "module": "commonjs",
-    "sourceMap":   true,
+    "sourceMap": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -16,7 +16,11 @@
     ],
     "strict": true,
     "strictNullChecks": true,
-    "lib": ["es6", "es2015", "dom"]
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "useDefineForClassFields": false
   },
   "files": ["src/public_api.ts"],
   "angularCompilerOptions": {
@@ -24,6 +28,8 @@
     "debug": true,
     "skipMetadataEmit" : false,
     "strictMetadataEmit": true,
-    "skipTemplateCodegen": true
+    "skipTemplateCodegen": true,
+    "enableIvy": "true",
+    "compilationMode": "partial"
   }
 }
