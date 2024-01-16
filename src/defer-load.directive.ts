@@ -11,6 +11,7 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     @Input() public preRender: boolean = true;
     @Input() public fallbackEnabled: boolean = true;
     @Input() public removeListenersAfterLoad: boolean = true;
+    // eslint-disable-next-line
     @Output() public deferLoad: EventEmitter<any> = new EventEmitter();
 
     private _intersectionObserver?: IntersectionObserver;
@@ -19,7 +20,7 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     constructor (
         private _element: ElementRef,
         private _zone: NgZone,
-        @Inject(PLATFORM_ID) private platformId: Object
+        @Inject(PLATFORM_ID) private platformId: object
     ) { }
 
     public ngOnInit () {
@@ -58,7 +59,7 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private registerIntersectionObserver (): void {
-        if (!!this._intersectionObserver) {
+        if (!this._intersectionObserver) {
             return;
         }
         this._intersectionObserver = new IntersectionObserver(entries => {
@@ -117,8 +118,8 @@ export class DeferLoadDirective implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private isVisible () {
-        let scrollPosition = this.getScrollPosition();
-        let elementOffset = this._element.nativeElement.getBoundingClientRect().top + window.scrollY;
+        const scrollPosition = this.getScrollPosition();
+        const elementOffset = this._element.nativeElement.getBoundingClientRect().top + window.scrollY;
         return elementOffset <= scrollPosition;
     }
 

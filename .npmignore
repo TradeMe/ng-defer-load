@@ -4,4 +4,3 @@ src/
 .gitignore
 package-lock.json
 tsconfig.json
-tslint.json
