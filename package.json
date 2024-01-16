@@ -32,21 +32,21 @@
     "rxjs": "~7.5.7"
   },
   "devDependencies": {
-    "@angular-devkit/core": "^16.2.10",
-    "@angular/cli": "^16.2.10",
-    "@angular/common": "^16.2.12",
-    "@angular/compiler": "^16.2.12",
-    "@angular/compiler-cli": "^16.2.12",
-    "@angular/core": "^16.2.12",
-    "@angular/platform-browser": "^16.2.12",
+    "@angular-devkit/core": "^17.0.7",
+    "@angular/cli": "^17.0.7",
+    "@angular/common": "^17.0.7",
+    "@angular/compiler": "^17.0.7",
+    "@angular/compiler-cli": "^17.0.7",
+    "@angular/core": "^17.0.7",
+    "@angular/platform-browser": "^17.0.7",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "eslint": "^8.56.0",
-    "ng-packagr": "^16.2.0",
+    "ng-packagr": "^17.0.2",
     "rimraf": "^3.0.0",
     "rxjs": "~7.5.7",
     "tslib": "^2.3.0",
     "typescript": "^5.2.2",
-    "zone.js": "~0.13.3"
+    "zone.js": "~0.14.2"
   }
 }
