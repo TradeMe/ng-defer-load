@@ -90,3 +90,5 @@ v8.2.1 - Fix for IE11 and older browsers
 v8.2.2 - Updated dependencies due to security advisories
 
 v14.0.0 - Supports Angular 12+ (targeting Angular 14) with partial Ivy builds. Additionally, drops support for IE11.
+
+v16.0.0 - Package upgraded to Angular 16
